@@ -1,0 +1,40 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "/Users/ilkinguluzade/Desktop/embassy/logs/.a5820960b0c79f1dff49e25bf6d2306db44b075c-audit.json",
+    "files": [
+        {
+            "date": 1721630337468,
+            "name": "/Users/ilkinguluzade/Desktop/embassy/logs/Phalcon-22-07-2024.log",
+            "hash": "d5b10b12128ef72c4b007175cae413528f99359ba8dac998575294500f830cd6"
+        },
+        {
+            "date": 1721688503681,
+            "name": "/Users/ilkinguluzade/Desktop/embassy/logs/Phalcon-23-07-2024.log",
+            "hash": "a4393100eff1eeb2c2981b9b7c23e8fd783caf01c862fc7efdbcaf75c9ff1f3d"
+        },
+        {
+            "date": 1721801212060,
+            "name": "/Users/ilkinguluzade/Desktop/embassy/logs/Phalcon-24-07-2024.log",
+            "hash": "5376a04d8eda33d62ad94130d9edd2ac07bd736820cffe7eb3c0b1b989ebbf77"
+        },
+        {
+            "date": 1721898888893,
+            "name": "/Users/ilkinguluzade/Desktop/embassy/logs/Phalcon-25-07-2024.log",
+            "hash": "7e4c789d076259475c9a2299a35114ab6afc6a202fbaa04cad31cb5e186af799"
+        },
+        {
+            "date": 1721967324538,
+            "name": "/Users/ilkinguluzade/Desktop/embassy/logs/Phalcon-26-07-2024.log",
+            "hash": "41bb6ba35f2620818e3e8114df8f7660c87fefa41ce93f40a3aa5754cbc3e10d"
+        },
+        {
+            "date": 1722363842716,
+            "name": "/Users/ilkinguluzade/Desktop/embassy/logs/Phalcon-30-07-2024.log",
+            "hash": "a1596cb2ecd1b52c41ef77ab7e92ebafbda63f8a61576642f5c0dbc13f7a46d8"
+        }
+    ],
+    "hashType": "sha256"
+}

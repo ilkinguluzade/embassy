@@ -1,0 +1,226 @@
+<%- include('partials/top') %>
+<body>
+
+<%- include('partials/menu', { unreadCount: unreadCount, user: user, logo1:'assets/images/logo-full.png', logo2:'assets/images/logo-abbr.png' }) %>
+<%- include('partials/header', {lang:'assets/vendors/img/flags/4x3/az.svg', profilePhoto: 'assets/images/avatar/1.png'}) %>
+<main class="nxl-container apps-container apps-email">
+    <div class="nxl-content without-header nxl-full-content">
+        <div class="main-content d-flex">
+            <div class="content-area" data-scrollbar-target="#psScrollbarInit">
+                <div class="content-area-header bg-white sticky-top">
+                    <h4 class="fw-bolder mb-0"><%= title %></h4>
+                    <div class="page-header-right ms-auto">
+                        <div class="hstack gap-2">
+                            <div class="hstack">
+                                <a href="javascript:void(0)" class="search-form-open-toggle" style="display: none">
+                                    <div class="avatar-text avatar-md" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Axtar">
+                                        <i class="feather-search"></i>
+                                    </div>
+                                </a>
+                                <div class="content-sidebar-header">
+                                    <a href="javascript:void(0);" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#composeMail">
+                                        <i class="feather-plus me-2"></i>
+                                        <span>Yeni mesaj göndər</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-area-body p-4">
+                    <div class="col-lg-12">
+                        <div class="card stretch stretch-full">
+
+                            <div class="card-body custom-card-action p-2">
+                                <div class="table-responsive">
+                                    <table id="messagesTable" class="table table-hover mb-0">
+                                        <thead >
+                                        <tr class="p-3">
+                                            <th scope="col">Kimə</th>
+                                            <% if(user.role === 'Super Admin') { %>
+                                                <th scope="col">Kimdən</th>
+                                            <% } %>
+                                            <th scope="col">Mövzu</th>
+                                            <th scope="col">Cari vəziyyəti</th>
+                                            <th scope="col">Cari statusu</th>
+                                            <th scope="col">Göndərilmə vaxtı</th>
+                                            <th scope="col" class="text-end">Əməliyyatlar</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <% messages.forEach(message => { %>
+                                            <tr>
+                                                <td>
+                                                    <div class="hstack gap-3">
+                                                        <div class="avatar-text bg-soft-primary text-primary">
+                                                            <img src="assets/images/avatar/1.png" alt="user-image" class="img-fluid user-avtar me-0" />
+                                                        </div>
+                                                        <div>
+                                                            <a href="javascript:void(0);" class="d-block mb-1" style="font-weight: <% if (message.message_isSeen === false){ %> bolder <% } else { %> lighter <% } %>"><%= message.message_to %></a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <% if(user.role === 'Super Admin') { %>
+                                                    <td>
+                                                        <div class="hstack gap-3">
+                                                            <div class="avatar-text bg-soft-primary text-primary">
+                                                                <img src="assets/images/avatar/1.png" alt="user-image" class="img-fluid user-avtar me-0" />
+                                                            </div>
+                                                            <div>
+                                                                <a href="javascript:void(0);" class="d-block mb-1" style="font-weight: <% if (message.message_isSeen === false){ %> bolder <% } else { %> lighter <% } %>"><%= message.message_from %></a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                <% } %>
+                                                <td>
+                                                    <div class="hstack gap-3">
+                                                        <div>
+                                                            <a href="javascript:void(0);" class="d-block mb-1" style="font-weight: <% if (message.message_isSeen === false){ %> bolder <% } else { %> lighter <% } %>"><%= message.message_subject %></a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="fs-12 fw-medium mb-2">
+                                                        <% if (message.message_isSeen === false && message.message_file_is_downloaded === false && message.message_file_is_deleted === false){ %> <span style="font-weight: bold">25%</span> <% } else if (message.message_isSeen === true && message.message_file_is_downloaded === false && message.message_file_is_deleted === false) { %> <span>50%</span> <% } else if( message.message_isSeen === true && message.message_file_is_downloaded === true && message.message_file_is_deleted === false) { %><span> 75% </span><% } else if( message.message_isSeen === true && message.message_file_is_downloaded === true && message.message_file_is_deleted === true) { %><span> 100% </span><% }%> tamamlandı
+                                                    </div>
+                                                    <div class="progress ht-3">
+                                                        <div class="progress-bar bg-<% if (message.message_isSeen === false && message.message_file_is_downloaded === false && message.message_file_is_deleted === false){ %>primary<% } else if (message.message_isSeen === true && message.message_file_is_downloaded === false && message.message_file_is_deleted === false) { %>warning<% } else if( message.message_isSeen === true && message.message_file_is_downloaded === true && message.message_file_is_deleted === false) { %>danger<% } else if( message.message_isSeen === true && message.message_file_is_downloaded === true && message.message_file_is_deleted === true) { %>success<% }%>" role="progressbar" aria-valuenow="<% if (message.message_isSeen === false && message.message_file_is_downloaded === false && message.message_file_is_deleted === false){ %>25<% } else if (message.message_isSeen === true && message.message_file_is_downloaded === false && message.message_file_is_deleted === false) { %>50<% } else if( message.message_isSeen === true && message.message_file_is_downloaded === true && message.message_file_is_deleted === false) { %>75<% } else if( message.message_isSeen === true && message.message_file_is_downloaded === true && message.message_file_is_deleted === true) { %>100<% }%>" aria-valuemin="0" aria-valuemax="100" style="width: <% if (message.message_isSeen === false && message.message_file_is_downloaded === false && message.message_file_is_deleted === false){ %>25<% } else if (message.message_isSeen === true && message.message_file_is_downloaded === false && message.message_file_is_deleted === false) { %>50<% } else if( message.message_isSeen === true && message.message_file_is_downloaded === true && message.message_file_is_deleted === false) { %>75<% } else if( message.message_isSeen === true && message.message_file_is_downloaded === true && message.message_file_is_deleted === true) { %>100<% }%>%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <% if (message.message_isSeen === false && message.message_file_is_downloaded === false && message.message_file_is_deleted === false){ %> <span class="ms-2 badge bg-soft-primary text-primary">Görülməyib</span> <% } else if (message.message_isSeen === true && message.message_file_is_downloaded === false && message.message_file_is_deleted === false) { %> <span class="ms-2 badge bg-soft-warning text-warning">Görüldü</span> <% } else if( message.message_isSeen === true && message.message_file_is_downloaded === true && message.message_file_is_deleted === false) { %><span class="ms-2 badge bg-soft-success text-success"> Fayl yükləndi </span><% } else if( message.message_isSeen === true && message.message_file_is_downloaded === true && message.message_file_is_deleted === true) { %><span class="ms-2 badge bg-soft-danger text-danger"> Fayl silindi </span><% }%>
+                                                </td>
+                                                <td>
+                                                    <i class="feather-clock fs-10"></i>
+                                                    <span style="font-weight: <% if (message.message_isSeen === false){ %> bolder <% } else { %> lighter <% } %>"><%= new Date(message.createdAt).toLocaleDateString('az-AZ', { day: '2-digit', month: 'long', year: 'numeric' }) %></span>
+                                                </td>
+                                                <td>
+                                                    <div class="hstack gap-2 justify-content-end">
+                                                        <a href="/sent/read-message/<%= message._id %>" class="avatar-text avatar-md">
+                                                            <i class="feather-eye"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <% }) %>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <ul class="list-unstyled d-flex align-items-center gap-2 mb-0 pagination-common-style ">
+                                    <% if (currentPage > 1) { %>
+                                        <li>
+                                            <a href="?page=<%= currentPage - 1 %>"><i class="bi bi-arrow-left"></i></a>
+                                        </li>
+                                    <% } %>
+
+                                    <% for (let i = 1; i <= totalPages; i++) { %>
+                                        <li>
+                                            <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>"><%= i %></a>
+                                        </li>
+                                    <% } %>
+
+                                    <% if (currentPage < totalPages) { %>
+                                        <li>
+                                            <a href="?page=<%= currentPage + 1 %>"><i class="bi bi-arrow-right"></i></a>
+                                        </li>
+                                    <% } %>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+</main>
+
+<div class="modal fade-scale" id="composeMail" tabindex="-1" aria-labelledby="composeMail" aria-hidden="true" data-bs-dismiss="ou">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <!--! BEGIN: [modal-header] !-->
+            <div class="modal-header">
+                <h2 class="d-flex flex-column mb-0">
+                    <span class="fs-18 fw-bold mb-1">Yeni mesaj göndər</span>
+                </h2>
+                <a href="javascript:void(0)" class="avatar-text avatar-md bg-soft-danger close-icon" data-bs-dismiss="modal">
+                    <i class="feather-x text-danger"></i>
+                </a>
+            </div>
+            <form id="newMessageForm" action="/messages" method="POST" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <input type="hidden" class="form-control" id="message_from" name="message_from" value="<%= user.email %>">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message_to" class="form-label">Qəbul edən</label>
+                        <select class="form-control" id="message_to" name="message_to" required>
+                            <%
+
+                            if (user.role === 'Super Admin' || user.role === 'Admin') {
+
+                            users.forEach(u => { %>
+                                <option value="<%= u.user_mail %>"><%= u.user_name %> <%= u.user_surname %></option>
+                            <% });
+                            } else if (user.role === 'User') {
+
+                            users.forEach(u => {
+                            if (u.user_role === 'Admin') { %>
+                                <option value="<%= u.user_mail %>"><%= u.user_name %> <%= u.user_surname %></option>
+                            <% }
+                            });
+                            }
+                            %>
+                        </select>
+
+
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="message_subject" class="form-label">Mövzu</label>
+                        <input type="text" class="form-control" id="message_subject" name="message_subject" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message_content" class="form-label">Mesaj mətni</label>
+                        <textarea class="form-control" id="message_content" name="message_content" rows="3" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="message_file" class="form-label">Fayl əlavə et</label>
+                        <input type="file" class="form-control" id="message_file" name="message_file">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message_file_life_time" class="form-label">Fayl Ömrü (dəqiqə)</label>
+                        <input type="number" class="form-control" id="message_file_life_time" name="message_file_life_time">
+                    </div>
+                    <div class="mb-3">
+                        <label for="message_severity" class="form-label">Vaciblik dərəcəsi</label>
+                        <select class="form-control" id="message_severity" name="message_severity">
+                            <option value="Az vacib">Az vacib</option>
+                            <option value="Vacib">Vacib</option>
+                            <option value="Çox vacib">Çox vacib</option>
+                        </select>
+                    </div>
+                    <input type="hidden" name="message_from" value="<%= user.email %>">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ləğv et</button>
+                    <button type="submit" class="btn btn-primary">Göndər</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<%- include('partials/systemparameters')%>
+<%- include('partials/footer')%>
+
+</body>
+
+</html>

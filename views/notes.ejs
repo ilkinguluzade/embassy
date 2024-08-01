@@ -1,0 +1,124 @@
+<%- include('partials/top') %>
+<body>
+<%- include('partials/menu', { unreadCount: unreadCount, user: user, logo1:'assets/images/logo-full.png', logo2:'assets/images/logo-abbr.png' }) %>
+<%- include('partials/header', {lang:'assets/vendors/img/flags/4x3/az.svg', profilePhoto: 'assets/images/avatar/1.png'}) %>
+<main class="nxl-container apps-container apps-notes d-flex flex-column min-vh-100">
+    <div class="nxl-content without-header nxl-full-content flex-grow-1 d-flex">
+        <div class="main-content d-flex flex-grow-1">
+            <div class="content-area flex-grow-1" data-scrollbar-target="#psScrollbarInit">
+                <div class="content-area-header sticky-top">
+                    <div class="d-flex content-sidebar-header bg-white sticky-top hstack justify-content-between w-100">
+                        <h4 class="fw-bolder mb-0"><%= title %></h4>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addnotesmodal">Yeni qeyd əlavə et</button>
+                    </div>
+                </div>
+                <div class="content-area-body pb-0">
+                    <div class="row note-has-grid" id="note-full-container">
+                        <% if (notes.length === 0) { %>
+                            <div class="no-messages">
+                                <p>Hal-hazırda qeydiniz yoxdur.</p>
+                            </div>
+                        <% } else { %>
+                            <% notes.forEach(note => { %>
+                                <div class="col-xxl-4 col-xl-6 col-lg-4 col-sm-6 single-note-item all-category note-important note-tasks">
+                                    <div class="card card-body mb-4 stretch stretch-full">
+                                        <span class="side-stick" style="background-color: <%= new Date() > new Date(note.note_date_end) ? 'red' : '' %>;"></span>
+                                        <h5 class="note-title text-truncate w-75 mb-1"><%= note.note_title %></h5>
+                                        <div class="d-flex flex-column g-0">
+                                            <p class="m-0">Başlanğıc tarixi: <span class="fs-11 text-muted note-date"><%= note.formattedStartDate %></span></p>
+                                            <p>Bitmə tarixi: <span class="fs-11 text-muted note-date"><%= note.formattedEndDate %></span></p>
+                                        </div>
+                                        <div class="note-content flex-grow-1">
+                                            <p class="text-muted note-inner-content text-truncate-3-line"><%= note.note_description %></p>
+                                        </div>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <form action="/notes/pin/<%= note._id %>" method="post">
+                                                <button class="btn btn-sm btn-warning" type="submit"><i class="fa-solid fa-thumbtack"></i> &nbsp; <%= note.note_is_pinned ? 'Pini ləğv et' : ' Pin et' %></button>
+                                            </form>
+                                            <form action="/notes/delete/<%= note._id %>" method="post">
+                                                <button class="btn btn-sm btn-danger" type="submit"><i class="fa-solid fa-trash-can"></i></button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            <% }) %>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="mt-auto">
+        <%- include('partials/copyright') %>
+    </footer>
+</main>
+
+<div class="modal fade" id="addnotesmodal" tabindex="-1" data-bs-keyboard="false" role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Yeni qeyd əlavə et</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/notes" method="post">
+                <div class="modal-body">
+                    <div class="notes-box">
+                        <div class="notes-content">
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="note-title">
+                                        <label class="form-label">Qeyd başlığı</label>
+                                        <input type="text" name="note_title" class="form-control" placeholder="Başlıq" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <div class="note-description">
+                                        <label class="form-label">Qeyd məzmunu</label>
+                                        <textarea name="note_description" class="form-control" placeholder="Məzmun" rows="5" required></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <div class="note-date">
+                                        <label class="form-label">Başlanğıc tarixi</label>
+                                        <input type="date" name="note_date_start" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <div class="note-date">
+                                        <label class="form-label">Bitmə tarixi</label>
+                                        <input type="date" name="note_date_end" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <div class="note-severity">
+                                        <label class="form-label">Vaciblik səviyyəsi</label>
+                                        <select name="note_severity" class="form-control" required>
+                                            <option value="Az vacib">Az vacib</option>
+                                            <option value="Vacib">Vacib</option>
+                                            <option value="Çox vacib">Çox vacib</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <div class="note-pinned">
+                                        <label class="form-label">Pin olunsun</label>
+                                        <input type="checkbox" name="note_is_pinned" value="true">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Ləğv et</button>
+                    <button class="btn btn-primary" type="submit">Əlavə et</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/systemparameters')%>
+<%- include('partials/footer')%>
+</body>
+</html>

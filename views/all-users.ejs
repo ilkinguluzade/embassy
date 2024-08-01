@@ -1,0 +1,234 @@
+<%- include('partials/top') %>
+<body>
+<%- include('partials/menu', { unreadCount: unreadCount, user: user, logo1:'assets/images/logo-full.png', logo2:'assets/images/logo-abbr.png' }) %>
+<%- include('partials/header', {lang:'assets/vendors/img/flags/4x3/az.svg', profilePhoto: 'assets/images/avatar/1.png'}) %>
+<main class="nxl-container apps-container apps-notes d-flex flex-column min-vh-100">
+    <div class="nxl-content without-header nxl-full-content flex-grow-1 d-flex">
+        <div class="main-content d-flex flex-grow-1">
+            <div class="content-area flex-grow-1" data-scrollbar-target="#psScrollbarInit">
+                <div class="content-area-header sticky-top">
+                    <div class="d-flex content-sidebar-header bg-white sticky-top hstack justify-content-between w-100">
+                        <h4 class="fw-bolder mb-0"><%= title %></h4>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addusermodal">Yeni istifadəçi əlavə et</button>
+                    </div>
+                </div>
+                <div class="content-area-body pb-0">
+                    <div class="row note-has-grid" id="note-full-container">
+                        <div class="col-xxl-12">
+                            <div class="card stretch stretch-full">
+                                <div class="card-header">
+                                    <h5 class="card-title">Bütün istifadəçilər </h5>
+
+                                </div>
+                                <div class="card-body custom-card-action p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover mb-0">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Ad / Soyad</th>
+
+                                                <th scope="col">Qeydiyyat tarixi</th>
+                                                <th scope="col">Status</th>
+                                                <th scope="col" class="text-center">Əməliyyatlar</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <% users.forEach(user => { %>
+                                            <tr>
+                                                <td class="position-relative">
+                                                    <div class="ht-50 position-absolute start-0 top-50 translate-middle border-start border-5 border-success rounded"></div>
+                                                    <div class="hstack gap-3">
+                                                        <div class="avatar-image rounded">
+                                                            <img class="img-fluid" src="assets/images/avatar/12.png" alt="">
+                                                        </div>
+                                                        <div>
+                                                            <a href="javascript:void(0);" class="d-block"><%= user.user_name%> <%= user.user_surname %></a>
+                                                            <span class="fs-12 text-muted"><%= user.user_mail%></span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td><%= user.formattedRegDate%></td>
+
+                                                <td>
+                                                    <a href="javascript:void(0)" class="badge  <% if (user.user_status === 'Aktiv'){ %> bg-soft-success text-success <% } else { %>bg-soft-danger text-danger<% } %>"><%= user.user_status%></a>
+                                                </td>
+                                                <td>
+                                                    <div class="d-flex justify-content-around">
+
+                                                    <a href="/all-users/<%= user._id %>" class="btn btn-sm btn-info"><i class="fa fa-eye"></i></a>
+                                                        <button class="btn btn-sm btn-danger" onclick="confirmDelete('<%= user._id %>')"><i class="fa fa-trash"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% } )%>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="card-footer">
+                                    <ul class="list-unstyled d-flex align-items-center gap-2 mb-0 pagination-common-style">
+                                        <% if (currentPage > 1) { %>
+                                            <li><a href="?page=<%= currentPage - 1 %>"><i class="bi bi-arrow-left"></i></a></li>
+                                        <% } %>
+
+                                        <% if (totalPages <= 5) { %>
+                                            <% for (let i = 1; i <= totalPages; i++) { %>
+                                                <li><a href="?page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a></li>
+                                            <% } %>
+                                        <% } else { %>
+                                            <% if (currentPage <= 3) { %>
+                                                <% for (let i = 1; i <= 5; i++) { %>
+                                                    <li><a href="?page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a></li>
+                                                <% } %>
+                                                <li><a href="?page=<%= 6 %>"><i class="bi bi-dot"></i></a></li>
+                                                <li><a href="?page=<%= totalPages %>"><%= totalPages %></a></li>
+                                            <% } else if (currentPage > totalPages - 3) { %>
+                                                <li><a href="?page=<%= 1 %>"><%= 1 %></a></li>
+                                                <li><a href="?page=<%= totalPages - 5 %>"><i class="bi bi-dot"></i></a></li>
+                                                <% for (let i = totalPages - 4; i <= totalPages; i++) { %>
+                                                    <li><a href="?page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a></li>
+                                                <% } %>
+                                            <% } else { %>
+                                                <li><a href="?page=<%= 1 %>"><%= 1 %></a></li>
+                                                <li><a href="?page=<%= currentPage - 1 %>"><i class="bi bi-dot"></i></a></li>
+                                                <% for (let i = currentPage - 1; i <= currentPage + 1; i++) { %>
+                                                    <li><a href="?page=<%= i %>" class="<%= i === currentPage ? 'active' : '' %>"><%= i %></a></li>
+                                                <% } %>
+                                                <li><a href="?page=<%= currentPage + 1 %>"><i class="bi bi-dot"></i></a></li>
+                                                <li><a href="?page=<%= totalPages %>"><%= totalPages %></a></li>
+                                            <% } %>
+                                        <% } %>
+
+                                        <% if (currentPage < totalPages) { %>
+                                            <li><a href="?page=<%= currentPage + 1 %>"><i class="bi bi-arrow-right"></i></a></li>
+                                        <% } %>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="mt-auto">
+        <%- include('partials/copyright') %>
+    </footer>
+</main>
+
+<div class="modal fade" id="addusermodal" tabindex="-1" data-bs-keyboard="false" role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitleId">Yeni istifadəçi əlavə et</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/users" method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ad</label>
+                            <input type="text" name="user_name" class="form-control" placeholder="Ad" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Soyad</label>
+                            <input type="text" name="user_surname" class="form-control" placeholder="Soyad" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ata adı</label>
+                            <input type="text" name="user_fathername" class="form-control" placeholder="Ata adı">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ş/V-nin seriya və nömrəsi</label>
+                            <input type="text" name="user_id_card_number" class="form-control" placeholder="Ata adı">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ş/V-nin FİN kodu</label>
+                            <input type="text" name="user_id_card_fin" class="form-control" placeholder="Ata adı">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ölkə</label>
+                            <input type="text" name="user_country" class="form-control" placeholder="Ata adı">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Doğum tarixi</label>
+                            <input type="date" name="user_birth_date" class="form-control">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Mobil nömrə</label>
+                            <input type="text" name="user_mobile_number" class="form-control" placeholder="Mobil nömrə">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">E-poçt</label>
+                            <input type="email" name="user_mail" class="form-control" placeholder="E-poçt" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Şifrə</label>
+                            <input type="password" name="user_password" class="form-control" placeholder="Şifrə" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Status</label>
+                            <select name="user_status" class="form-control" required>
+                                <option value="Aktiv">Aktiv</option>
+                                <option value="Passiv">Passiv</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Rol</label>
+                            <select name="user_role" class="form-control" required>
+                                <option value="Admin">Admin</option>
+                                <option value="Super Admin">Super Admin</option>
+                                <option value="User">User</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Ləğv et</button>
+                    <button class="btn btn-primary" type="submit">Əlavə et</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Confirm Delete Modal -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" role="dialog" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmDeleteModalLabel">Emin misiniz?</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bu istifadəçini silmək istədiyinizə əminsinizmi?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ləğv et</button>
+                <button type="button" class="btn btn-danger" id="confirmDeleteButton">Sil</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function confirmDelete(userId) {
+        const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+        confirmDeleteButton.setAttribute('data-user-id', userId);
+        $('#confirmDeleteModal').modal('show');
+    }
+
+    document.getElementById('confirmDeleteButton').addEventListener('click', function() {
+        const userId = this.getAttribute('data-user-id');
+        window.location.href = '/delete-user/' + userId;
+    });
+</script>
+
+
+<%- include('partials/systemparameters')%>
+<%- include('partials/footer')%>
+</body>
+</html>

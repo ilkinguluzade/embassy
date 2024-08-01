@@ -1,0 +1,336 @@
+<%- include('partials/top') %>
+<body>
+<%- include('partials/menu', { unreadCount: unreadCount, user: user, logo1:'assets/images/logo-full.png', logo2:'assets/images/logo-abbr.png' }) %>
+<%- include('partials/header', {lang:'assets/vendors/img/flags/4x3/az.svg', profilePhoto: 'assets/images/avatar/1.png'}) %>
+<main class="nxl-container pb-5">
+    <div class="nxl-content">
+        <div class="page-header">
+            <div class="page-header-left d-flex align-items-center">
+                <div class="page-header-title">
+                    <h5 class="m-b-10">İstifadəçilər</h5>
+                </div>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><%= title %></li>
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="main-content">
+            <div class="row">
+                <div class="col-xxl-4 col-xl-6">
+                    <div class="card stretch stretch-full">
+                        <div class="card-body">
+                            <div class="mb-4 text-center">
+                                <div class="wd-150 ht-150 mx-auto mb-3 position-relative">
+                                    <div class="avatar-image wd-150 ht-150 border border-5 border-gray-3">
+                                        <img src="../assets/images/avatar/1.png" alt="" class="img-fluid">
+                                    </div>
+                                    <div class="wd-10 ht-10 text-success rounded-circle position-absolute translate-middle" style="top: 76%; right: 10px">
+                                        <i class="bi bi-patch-check-fill"></i>
+                                    </div>
+                                </div>
+                                <div class="mb-4">
+                                    <a href="javascript:void(0);" class="fs-14 fw-bold d-block"> <%= loggedInUser.user_name %> <%= loggedInUser.user_surname %></a>
+                                    <a href="javascript:void(0);" class="fs-12 fw-normal text-muted d-block"><%= loggedInUser.user_mail %></a>
+                                </div>
+                                <div class="fs-12 fw-normal text-muted text-center d-flex flex-wrap gap-3 mb-4">
+                                    <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
+                                        <h6 class="fs-15 fw-bolder">28.65K</h6>
+                                        <p class="fs-12 text-muted mb-0">Göndərilmiş mesaj</p>
+                                    </div>
+                                    <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
+                                        <h6 class="fs-15 fw-bolder">38.85K</h6>
+                                        <p class="fs-12 text-muted mb-0">Qəbul edilmiş mesaj</p>
+                                    </div>
+                                    <div class="flex-fill py-3 px-4 rounded-1 d-none d-sm-block border border-dashed border-gray-5">
+                                        <h6 class="fs-15 fw-bolder">43.67K</h6>
+                                        <p class="fs-12 text-muted mb-0">Yüklənmiş fayl</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <ul class="list-unstyled mb-4">
+                                <li class="hstack justify-content-between mb-4">
+                                    <span class="text-muted fw-medium hstack gap-3"><i class="feather-map-pin"></i>Ölkə</span>
+                                    <a href="javascript:void(0);" class="float-end"><%= loggedInUser.user_country%></a>
+                                </li>
+                                <li class="hstack justify-content-between mb-4">
+                                    <span class="text-muted fw-medium hstack gap-3"><i class="feather-phone"></i>Mobil telefon</span>
+                                    <a href="javascript:void(0);" class="float-end"><%= loggedInUser.user_mobile_number%></a>
+                                </li>
+                                <li class="hstack justify-content-between mb-0">
+                                    <span class="text-muted fw-medium hstack gap-3"><i class="feather-mail"></i>Mail adresi</span>
+                                    <a href="javascript:void(0);" class="float-end"><%= loggedInUser.user_mail %></a>
+                                </li>
+                            </ul>
+                            <div class="d-flex gap-2 text-center pt-4 mb-3">
+
+
+                                <a href="javascript:void(0);" class="w-100 btn btn-primary" onclick="openUpdateModal()">
+                                    <i class="feather-edit me-2"></i>
+                                    <span>Məlumatlarınızı yeniləyin</span>
+                                </a> <a href="javascript:void(0);" class="w-100 btn btn-warning" onclick="openPasswordUpdateModal()">
+                                    <i class="feather-lock me-2"></i>
+                                    <span>Şifrənizi yeniləyin</span>
+                                </a>
+
+                            </div>
+
+
+                            <div id="messageContainer"></div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-xxl-8 col-xl-6">
+                    <div class="card border-top-0">
+
+                        <div class="tab-content" style="min-height: 45rem">
+                            <div class="tab-pane fade <%= tab === 'overviewTab' ? 'show active p-4' : 'p-4' %> " id="overviewTab" role="tabpanel">
+
+                                <div class="profile-details mb-5">
+                                    <div class="mb-4 d-flex align-items-center justify-content-between">
+                                        <h5 class="fw-bold mb-0">Profilinizin detalları:</h5>
+
+                                    </div>
+                                    <div class="row g-0 mb-4">
+                                        <div class="col-sm-6 text-muted">Adı:</div>
+                                        <div class="col-sm-6 fw-semibold"><%= loggedInUser.user_name %></div>
+                                    </div>
+                                    <div class="row g-0 mb-4">
+                                        <div class="col-sm-6 text-muted">Soyadı:</div>
+                                        <div class="col-sm-6 fw-semibold"><%= loggedInUser.user_surname %></div>
+                                    </div>
+                                    <div class="row g-0 mb-4">
+                                        <div class="col-sm-6 text-muted">Ata adı:</div>
+                                        <div class="col-sm-6 fw-semibold"><%= loggedInUser.user_fathername %></div>
+                                    </div>
+                                    <div class="row g-0 mb-4">
+                                        <div class="col-sm-6 text-muted">Ş/V seriya və nömrəsi:</div>
+                                        <div class="col-sm-6 fw-semibold"><%= loggedInUser.user_id_card_number %></div>
+                                    </div>
+                                    <div class="row g-0 mb-4">
+                                        <div class="col-sm-6 text-muted">Ş/V FİN kodu:</div>
+                                        <div class="col-sm-6 fw-semibold"><%= loggedInUser.user_id_card_fin %></div>
+                                    </div>
+                                    <div class="row g-0 mb-4">
+                                        <div class="col-sm-6 text-muted">Doğum tarixi:</div>
+                                        <div class="col-sm-6 fw-semibold"><%= loggedInUser.user_birth_date%></div>
+                                    </div>
+                                    <div class="row g-0 mb-4">
+                                        <div class="col-sm-6 text-muted">Mobile telefonu:</div>
+                                        <div class="col-sm-6 fw-semibold"><%= loggedInUser.user_mobile_number%></div>
+                                    </div>
+                                    <div class="row g-0 mb-4">
+                                        <div class="col-sm-6 text-muted">Mail adresi:</div>
+                                        <div class="col-sm-6 fw-semibold"><%= loggedInUser.user_mail%></div>
+                                    </div>
+                                    <div class="row g-0 mb-4">
+                                        <div class="col-sm-6 text-muted">Ölkə:</div>
+                                        <div class="col-sm-6 fw-semibold"><%= loggedInUser.user_country%></div>
+                                    </div>
+                                    <div class="row g-0 mb-4">
+                                        <div class="col-sm-6 text-muted">Sistemdə qeydiyyat tarixi:</div>
+                                        <div class="col-sm-6 fw-semibold"><%= loggedInUser.formattedStartDate %></div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <!-- [ Main Content ] end -->
+    </div>
+   <%- include('partials/copyright')%>
+    <!-- [ Footer ] end -->
+</main>
+
+<%- include('partials/systemparameters')%>
+
+<div class="modal fade" id="passwordUpdateModal" tabindex="-1" role="dialog" aria-labelledby="passwordUpdateModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="passwordUpdateModalLabel">Şifrəni Yenilə</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="passwordUpdateForm">
+                    <input type="hidden" id="userId" name="userId" value="<%= loggedInUser._id %>">
+
+                    <div class="form-group">
+                        <label>Yeni Şifrə:</label>
+                        <input type="password" class="form-control" id="newPassword" name="new_password" required>
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Yeni Şifrəni Təsdiqlə:</label>
+                        <input type="password" class="form-control" id="confirmNewPassword" name="confirm_new_password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary float-end">Yenilə</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="updateUserModal" tabindex="-1" role="dialog" aria-labelledby="updateUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updateUserModalLabel">İstifadəçi məlumatlarını yenilə</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="updateUserForm">
+                    <input type="hidden" id="userId" name="userId" value="<%= loggedInUser._id %>">
+
+                    <div class="form-group">
+                        <label>Adı:</label>
+                        <input type="text" class="form-control" id="updateUserName" name="user_name" value="<%= loggedInUser.user_name %>">
+                    </div>
+                    <div class="form-group">
+                        <label>Soyadı:</label>
+                        <input type="text" class="form-control" id="updateUserSurname" name="user_surname" value="<%= loggedInUser.user_surname %>">
+                    </div>
+                    <div class="form-group">
+                        <label>Ata adı:</label>
+                        <input type="text" class="form-control" id="updateUserFathername" name="user_fathername" value="<%= loggedInUser.user_fathername %>">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>Doğum tarixi:</label>
+                        <input type="date" class="form-control" id="updateUserBirthDate" name="user_birth_date" value="<%= loggedInUser.user_birth_date %>">
+                    </div>
+                    <div class="form-group mb-3">
+                        <label>Mobil telefonu:</label>
+                        <input type="text" class="form-control" id="updateUserMobileNumber" name="user_mobile_number" value="<%= loggedInUser.user_mobile_number %>">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary float-end">Yenilə</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openUpdateModal() {
+        const updateUserModal = new bootstrap.Modal(document.getElementById('updateUserModal'));
+        updateUserModal.show();
+    }
+
+    document.getElementById('updateUserForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        const userId = formData.get('userId');
+
+        try {
+            const response = await fetch('/update-user', {
+                method: 'POST',
+                body: new URLSearchParams(formData),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+
+                document.getElementById('messageContainer').innerHTML = `
+                <div class="bg-soft-success text-success p-3" style="border-radius: 1rem">
+                    ${result.message}
+                </div>
+            `;
+                // Modal'ı kapat
+                const updateUserModal = bootstrap.Modal.getInstance(document.getElementById('updateUserModal'));
+                updateUserModal.hide();
+            } else {
+                // Hata mesajını göster
+                document.getElementById('messageContainer').innerHTML = `
+                <div class="bg-soft-danger text-danger p-3" style="border-radius: 1rem">
+                    ${result.message}
+                </div>
+            `;
+            }
+        } catch (error) {
+            console.error('Hata:', error);
+
+            document.getElementById('messageContainer').innerHTML = `
+            <div class="bg-soft-danger text-danger p-3" style="border-radius: 1rem">
+                Bir hata oluştu
+            </div>
+        `;
+        }
+    });
+
+    function openPasswordUpdateModal() {
+        const passwordUpdateModal = new bootstrap.Modal(document.getElementById('passwordUpdateModal'));
+        passwordUpdateModal.show();
+    }
+
+    // Formu gönderme işlemi
+    document.getElementById('passwordUpdateForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+        const userId = formData.get('userId');
+        const passwordUpdateModal = bootstrap.Modal.getInstance(document.getElementById('passwordUpdateModal'));
+
+        try {
+            const response = await fetch('/update-password', {
+                method: 'POST',
+                body: new URLSearchParams(formData),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                // Başarılı mesajı göster
+                document.getElementById('messageContainer').innerHTML = `
+                <div class="bg-soft-success text-success p-3" style="border-radius: 1rem">
+                    ${result.message}
+                </div>
+            `;
+                // Modal'ı kapat
+                passwordUpdateModal.hide();
+            } else {
+                // Hata mesajını göster
+                document.getElementById('messageContainer').innerHTML = `
+                <div class="bg-soft-danger text-danger p-3" style="border-radius: 1rem">
+                    ${result.message}
+                </div>
+            `;
+            }
+        } catch (error) {
+            console.error('Hata:', error);
+            // Hata mesajını gösterme
+            document.getElementById('messageContainer').innerHTML = `
+            <div class="bg-soft-danger text-danger p-3" style="border-radius: 1rem">
+                Bir hata oluştu
+            </div>
+        `;
+        }
+    });
+
+
+
+</script>
+
+<%- include('partials/footer')%>
+
+</body>
+
+</html>

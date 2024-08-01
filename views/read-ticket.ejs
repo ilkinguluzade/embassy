@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keyword" content="">
+    <meta name="author" content="theme_ocean">
+    <!--! The above 6 meta tags *must* come first in the head; any other head content must come *after* these tags !-->
+    <!--! BEGIN: Apps Title-->
+    <title>Phalcon | <%= title %></title>
+    <!--! END:  Apps Title-->
+    <!--! BEGIN: Favicon-->
+    <link rel="shortcut icon" type="image/x-icon" href="../../assets/images/favicon.ico">
+    <!--! END: Favicon-->
+    <!--! BEGIN: Bootstrap CSS-->
+    <link rel="stylesheet" type="text/css" href="../../assets/css/bootstrap.min.css">
+    <!--! END: Bootstrap CSS-->
+    <!--! BEGIN: Vendors CSS-->
+    <link rel="stylesheet" type="text/css" href="../../assets/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="../../assets/vendors/css/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="../../assets/vendors/css/select2-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="../../assets/vendors/css/tagify.min.css">
+    <link rel="stylesheet" type="text/css" href="../../assets/vendors/css/tagify-data.min.css">
+    <link rel="stylesheet" type="text/css" href="../../assets/vendors/css/quill.min.css">
+    <!--! END: Vendors CSS-->
+    <!--! BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="../../assets/css/theme.min.css">
+    <!--! END: Custom CSS-->
+    <!--! HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries !-->
+    <!--! WARNING: Respond.js doesn"t work if you view the page via file: !-->
+    <!--[if lt IE 9]>
+    <script src="https:oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https:oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body style="height: 100vh">
+<%- include('partials/menu', { unreadCount: unreadCount, user: user, logo1:'../../assets/images/logo-full.png', logo2:'../../assets/images/logo-abbr.png' })  %>
+<%- include('partials/header', {lang:'../../assets/vendors/img/flags/4x3/az.svg', profilePhoto: '../../assets/images/avatar/1.png'}) %>
+
+<main class="nxl-container">
+    <div class="nxl-content">
+
+        <div class="main-content" style="margin-bottom: 25vh" >
+            <div class="tab-content">
+                <div class="tab-pane fade active show" id="overviewTab">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card stretch stretch-full">
+                                <div class="card-body task-header d-md-flex align-items-center justify-content-between">
+                                    <div class="me-4">
+                                        <h4 class="fw-bold d-flex">
+                                            <span class="text-truncate-1-line">Mesajın mövzusu: <%= ticket.ticket_subject %> <span class="badge bg-soft-primary text-primary mx-3"><%= ticket.ticket_status %></span></span>
+                                        </h4>
+
+                                    </div>
+                                    <% if (ticket.ticket_to === user.email || ticket.ticket_from === user.email) { %>
+                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#replyModal">
+                                            Cavabla
+                                        </button>
+                                    <% } %>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8">
+                            <div class="card stretch stretch-full">
+                                <div class="card-header">
+                                    <div class="w-100">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <a href="javascript:void(0);" class="fs-12 fw-medium text-muted">
+                                                <span class="text-truncate-1-line">Prosesin tamamlanma mərhələsi</span>
+                                            </a>
+                                            <div class="ms-3">
+                                                <span class="fs-12 text-muted text-truncate-1-line">16/25 Tasks Completed <span class="fs-11 text-muted">(78%)</span></span>
+                                            </div>
+                                        </div>
+                                        <div class="progress mt-2 ht-5">
+                                            <div class="progress-bar bg-primary" role="progressbar" style="width: 78%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+                                            <label class="form-label">Göndərən</label>
+                                            <p><%= ticket.ticket_from%></p>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <label class="form-label">Qəbul edən </label>
+                                            <p><%= ticket.ticket_to%></p>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <label class="form-label">Göndərilmə tarixi</label>
+                                            <p><%= new Date(ticket.createdAt).toLocaleDateString('az-AZ', { day: '2-digit', month: 'long', year: 'numeric' }) %></p>
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+                                            <label class="form-label">Vaciblik dərəcəsi</label>
+                                            <p><%= ticket.ticket_severity%></p>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label class="form-label">Təsvir mətni</label>
+                                        <% if (ticket.ticket_content) { %>
+                                            <p><%= ticket.ticket_content%></p>
+                                            <% } else { %> <p>Bu biletin mətni yoxdur...</p> <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-4">
+                            <div class="row">
+                                <div class="col-xxl-12 col-xl-12 col-sm-6">
+                                    <div class="card stretch stretch-full">
+                                        <div class="card-body">
+                                            <div class="avatar-text bg-soft-primary text-primary border-0 mb-3">
+                                                <i class="feather-log-in"></i>
+                                            </div>
+                                            <p><span class="fw-bold text-primary">Görülmə tarixi:</span> </p>
+                                            <div>
+                                                <span class="fw-bold text-dark"><% if (ticket.ticket_status === "Görüldü") { %>
+                                                        <span><%= new Date(ticket.ticket_seen_at).toLocaleString('az-AZ', {
+                                                                day: '2-digit',
+                                                                month: 'long',
+                                                                year: 'numeric',
+                                                                hour: '2-digit',
+                                                                minute: '2-digit',
+                                                                second: '2-digit',
+                                                                hour12: false,
+                                                                timeZone: 'Asia/Baku'
+                                                            }) %></span>
+                                                    <% } else { %>
+                                                        <span>Görülməyib</span>
+                                                    <% } %>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xxl-12 col-xl-12 col-sm-6">
+                                    <div class="card stretch stretch-full">
+                                        <div class="card-body">
+                                            <div class="avatar-text bg-soft-primary text-primary border-0 mb-3">
+                                                <i class="feather-log-in"></i>
+                                            </div>
+                                            <p><span class="fw-bold text-warning">Biletin bağlanma tarixi:</span></p>
+                                            <div>
+
+                                                        <span class="fw-bold text-dark">
+                                                            <% if (ticket.ticket_closed_at) {
+
+                                                            %>
+                                                                <span><%= new Date(ticket.ticket_closed_at).toLocaleString('az-AZ', {
+                                                                        day: '2-digit',
+                                                                        month: 'long',
+                                                                        year: 'numeric',
+                                                                        hour: '2-digit',
+                                                                        minute: '2-digit',
+                                                                        second: '2-digit',
+                                                                        hour12: false,
+                                                                        timeZone: 'Asia/Baku'
+                                                                    }) %></span>
+                                                            <% } else  { %>
+                                                                <span>Bilet hələ də açıqdır</span>
+                                                            <% } %>
+
+
+                                                        </span>
+                                            </div>
+                                        </div>
+
+                                        </div>
+                                    </div>
+                                <% if(ticket.ticket_attachment) { %>
+                                <div class="col-xl-12 col-md-6" >
+                                    <div class="card stretch stretch-full">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <div class="fw-semibold">Faylın HASH kodu</div>
+                                                <i class="feather-hash text-warning"></i>
+                                            </div>
+                                            <span style="font-size: 10px"><%= ticket.ticket_attachment_hash%></span>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-12 col-md-6">
+                                        <div class="card stretch stretch-full bg-success">
+                                            <div class="card-body ">
+                                                <div class="d-flex justify-content-between">
+                                                    <div class="fw-semibold"><%= ticket.ticket_attachment %> </div>
+
+                                                        <a href="#" class="fab fa-solid fa-download text-white" style="font-size: 1.5rem" onclick="downloadFile('<%= ticket._id %>')"></a>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                    <% } %>
+                                </div>
+
+                            </div>
+                        </div>
+                    <% if(ticket.ticket_replies.length>0) { %>
+                        <div class="col-xl-12">
+                            <div class="card stretch stretch-full">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h4 class="mb-4">Biletə verilən cavablar</h4>
+                                            <div class="accordion">
+                                                <% ticket.ticket_replies.slice().reverse().forEach((reply, index) => { %>
+                                                    <div class="accordion-item">
+                                                        <h2 class="accordion-header" id="heading<%= index %>">
+                                                            <button class="accordion-button <%= index > 0 ? 'collapsed' : '' %>" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%= index %>" aria-expanded="<%= index === 0 ? 'true' : 'false' %>" aria-controls="collapse<%= index %>">
+                                                                <div class="d-flex align-items-center">
+                                                                    <div class="avatar-image avatar-md">
+                                                                        <img src="assets/images/avatar/1.png" alt="" class="img-fluid">
+                                                                    </div>
+                                                                    <div class="ms-3">
+                                                                        <h2 class="fs-13 mb-1 text-truncate-1-line"><%= reply.replied_by %></h2>
+                                                                        <div class="fs-12 fw-normal text-muted text-truncate-1-line">
+                                                                            <span>Cavab tarixi:
+                                                                                <%= new Date(reply.replied_at).toLocaleString('az-AZ', {
+                                                                                    day: '2-digit',
+                                                                                    month: 'long',
+                                                                                    year: 'numeric',
+                                                                                    hour: '2-digit',
+                                                                                    minute: '2-digit',
+                                                                                    second: '2-digit',
+                                                                                    hour12: false,
+                                                                                    timeZone: 'Asia/Baku'
+                                                                                }) %></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </button>
+                                                        </h2>
+                                                        <div id="collapse<%= index %>" class="accordion-collapse collapse <%= index === 0 ? 'show' : '' %>" aria-labelledby="heading<%= index %>">
+                                                            <div class="accordion-body">
+                                                                <p><%= reply.reply_message %></p>
+                                                                <% if (reply.reply_attachment) { %>
+                                                                    <div class="fs-12">
+                                                                        <a href="/download/<%= reply.reply_attachment %>" target="_blank">Faylı yüklə</a>
+                                                                    </div>
+                                                                <% } %>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <% }); %>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    <% } %>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- [ Footer ] start -->
+    <footer class="footer">
+        <p class="fs-11 text-muted fw-medium text-uppercase mb-0 copyright">
+            <span>Copyright ©</span>
+            <script>
+                document.write(new Date().getFullYear());
+            </script>
+        </p>
+        <div class="d-flex align-items-center gap-4">
+            <a href="javascript:void(0);" class="fs-11 fw-semibold text-uppercase">Help</a>
+            <a href="javascript:void(0);" class="fs-11 fw-semibold text-uppercase">Terms</a>
+            <a href="javascript:void(0);" class="fs-11 fw-semibold text-uppercase">Privacy</a>
+        </div>
+    </footer>
+    <!-- [ Footer ] end -->
+</main>
+
+<div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="replyModalLabel">Bileti Yanıtla</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="replyForm" method="POST" action="/tickets/<%= ticket._id %>/reply" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="reply_message" class="form-label">Yanıt Mesajı</label>
+                        <textarea class="form-control" id="reply_message" name="reply_message" rows="4" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="reply_attachment" class="form-label">Ek</label>
+                        <input type="file" class="form-control" id="reply_attachment" name="reply_attachment">
+                    </div>
+                    <!-- Gizli alan için, biletin statusu ve id'sini güncelleyebilirsiniz -->
+                    <input type="hidden" name="ticket_status" value="<%= ticket.ticket_status %>">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>
+                    <button type="submit" class="btn btn-primary">Yanıtla</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<%- include('partials/systemparameters')%>
+
+<script>
+    function downloadFile(ticketId) {
+        fetch(`/tickets/${ticketId}/download`)
+            .then(response => {
+                if (response.ok) {
+                    return response.blob();
+                } else {
+                    throw new Error('Dosya indirilemedi.');
+                }
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = '<%= ticket.ticket_attachment %>'; // İndirilmek istenen dosya adı
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                alert('Dosya indirildi!');
+            })
+            .catch(err => {
+                console.error('Hata:', err);
+                alert('Dosya indirilemedi.');
+            });
+    }
+</script>
+
+
+<script src="../../assets/vendors/js/vendors.min.js"></script>
+<!-- vendors.min.js {always must need to be top} -->
+<script src="../../assets/vendors/js/select2.min.js"></script>
+<script src="../../assets/vendors/js/select2-active.min.js"></script>
+<script src="../../assets/vendors/js/tagify.min.js"></script>
+<script src="../../assets/vendors/js/tagify-data.min.js"></script>
+<script src="../../assets/vendors/js/quill.min.js"></script>
+<!--! END: Vendors JS !-->
+<!--! BEGIN: Apps Init  !-->
+<script src="../../assets/js/common-init.min.js"></script>
+<script src="../../assets/js/apps-email-init.min.js"></script>
+<!--! END: Apps Init !-->
+<!--! BEGIN: Theme Customizer  !-->
+<script src="../../assets/js/theme-customizer-init.min.js"></script>
+<!--! END: Theme Customizer !-->
+</body>
+
+</html>

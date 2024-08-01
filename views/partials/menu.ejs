@@ -1,0 +1,92 @@
+<nav class="nxl-navigation">
+    <div class="navbar-wrapper">
+        <div class="m-header">
+            <a href="/dashboard" class="b-brand">
+
+                <img src="<%= logo1 %>" alt="" class="logo logo-lg" height="50rem" />
+                <img src="<%= logo2 %>" alt="" class="logo logo-sm" style="scale: 1" />
+            </a>
+        </div>
+        <div class="navbar-content">
+            <ul class="nxl-navbar">
+                <li class="nxl-item nxl-caption">
+                    <label>Ümumi</label>
+                </li>
+                <li class="nxl-item">
+                    <a href="/dashboard" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-bar-chart-2"></i></span>
+                        <span class="nxl-mtext">Məlumat lövhəsi</span>
+                    </a>
+
+                </li> <li class="nxl-item nxl-caption">
+                    <label>Məlumat mübadiləsi</label>
+                </li>
+                <li class="nxl-item">
+                    <a href="/new-received" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-file-plus"></i></span>
+                        <span class="nxl-mtext">Yeni daxil olanlar <span class="bg-danger text-soft-danger p-1" style="border-radius: 0.2rem">   <%= unreadCount %></span></span>
+                    </a>
+                </li>
+                <li class="nxl-item">
+                    <a href="/inbox" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-inbox"></i></span>
+                        <span class="nxl-mtext">Daxil olanlar</span>
+                    </a>
+                </li>
+                <li class="nxl-item">
+                    <a href="/sent" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-send"></i></span>
+                        <span class="nxl-mtext">Göndərilənlər</span>
+                    </a>
+
+                </li>
+                </li> <li class="nxl-item nxl-caption">
+                    <label>Tətbiqlər</label>
+                </li>
+                <li class="nxl-item">
+                    <a href="/notes" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-pen-tool"></i></span>
+                        <span class="nxl-mtext">Qeydlər</span>
+                    </a>
+                </li>
+
+                </li> <li class="nxl-item nxl-caption">
+                    <label>Parametrlər</label>
+                </li>
+                <li class="nxl-item">
+                    <a href="/my-profile" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-user"></i></span>
+                        <span class="nxl-mtext">Mənim profilim</span>
+                    </a>
+                </li>
+
+
+                <li class="nxl-item nxl-hasmenu">
+                    <a href="javascript:void(0);" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-settings"></i></span>
+                        <span class="nxl-mtext">Soraqçalar</span><span class="nxl-arrow"><i class="feather-chevron-right"></i></span>
+                    </a>
+                    <ul class="nxl-submenu">
+                        <% if (user.role !== "User") { %> <li class="nxl-item"><a class="nxl-link" href="/received-tickets">Daxil olan biletlər</a></li> <% } %>
+
+                        <li class="nxl-item"><a class="nxl-link" href="/sent-tickets">Göndərilən biletlər</a></li>
+                    </ul>
+                </li>
+                <% if (user.role === "Super Admin") { %>
+                <li class="nxl-item nxl-hasmenu">
+                    <a href="javascript:void(0);" class="nxl-link">
+                        <span class="nxl-micon"><i class="feather-settings"></i></span>
+                        <span class="nxl-mtext">Admin</span><span class="nxl-arrow"><i class="feather-chevron-right"></i></span>
+                    </a>
+                    <ul class="nxl-submenu">
+                        <li class="nxl-item"><a class="nxl-link" href="/all-users">Bütün istifadəçilər</a></li>
+                    </ul>
+                </li>
+                <% } %>
+
+
+            </ul>
+
+        </div>
+    </div>
+</nav>

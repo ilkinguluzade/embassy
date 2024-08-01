@@ -1,0 +1,176 @@
+<%- include('partials/top') %>
+<body>
+
+<%- include('partials/menu', { unreadCount: unreadCount, user: user, logo1:'assets/images/logo-full.png', logo2:'assets/images/logo-abbr.png' }) %>
+<%- include('partials/header', {lang:'assets/vendors/img/flags/4x3/az.svg', profilePhoto: 'assets/images/avatar/1.png'}) %>
+<main class="nxl-container apps-container apps-email">
+    <div class="nxl-content without-header nxl-full-content">
+        <div class="main-content d-flex">
+            <div class="content-area" data-scrollbar-target="#psScrollbarInit">
+                <div class="content-area-header bg-white sticky-top">
+                    <h4 class="fw-bolder mb-0"><%= title %></h4>
+                    <div class="page-header-right ms-auto">
+                        <div class="hstack gap-2">
+                            <div class="hstack">
+                                <a href="javascript:void(0)" class="search-form-open-toggle" style="display: none">
+                                    <div class="avatar-text avatar-md" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Axtar">
+                                        <i class="feather-search"></i>
+                                    </div>
+                                </a>
+                                <form class="search-form" style="display: none">
+                                    <div class="search-form-inner">
+                                        <a href="javascript:void(0)" class="search-form-close-toggle">
+                                            <div class="avatar-text avatar-md" data-bs-toggle="tooltip" data-bs-trigger="hover" title="Geri">
+                                                <i class="feather-arrow-left"></i>
+                                            </div>
+                                        </a>
+                                        <input type="search" class="py-3 px-0 border-0 w-100" id="emailSearch" placeholder="Axtar..." autocomplete="off">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-area-body p-4">
+                    <div class="col-lg-12">
+                        <div class="card stretch stretch-full">
+
+                            <div class="card-body custom-card-action p-2">
+                                <div class="table-responsive">
+                                    <table id="messagesTable" class="table table-hover mb-0">
+                                        <thead >
+                                        <tr class="p-3">
+                                            <th scope="col">Kimdən</th>
+                                            <% if(user.role === 'Super Admin') { %>
+                                                <th scope="col">Kimə</th>
+                                            <% } %>
+                                            <th scope="col">Mövzu</th>
+                                            <th scope="col">Cari vəziyyəti</th>
+                                            <th scope="col">Cari statusu</th>
+                                            <th scope="col">Göndərilmə vaxtı</th>
+                                            <th scope="col" class="text-end">Əməliyyatlar</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <% tickets.forEach(ticket => { %>
+                                            <tr>
+
+
+                                                    <td>
+                                                        <div class="hstack gap-3">
+                                                            <div class="avatar-text bg-soft-primary text-primary">
+                                                                <img src="assets/images/avatar/1.png" alt="user-image" class="img-fluid user-avtar me-0" />
+                                                            </div>
+                                                            <a href="javascript:void(0);" class="d-block mb-1" style="font-weight: <% if (ticket.ticket_status === "Gözləmədə"){ %> bolder <% } else { %> lighter <% } %>"><%= ticket.ticket_from %></a>
+
+                                                        </div>
+                                                    </td>
+
+                                                <% if(user.role === 'Super Admin') { %>
+                                                <td>
+                                                    <div class="hstack gap-3">
+
+                                                        <div class="avatar-text bg-soft-primary text-primary">
+                                                            <img src="assets/images/avatar/1.png" alt="user-image" class="img-fluid user-avtar me-0" />
+                                                        </div>
+                                                        <a href="javascript:void(0);" class="d-block mb-1" style="font-weight: <% if (ticket.ticket_status === "Gözləmədə"){ %> bolder <% } else { %> lighter <% } %>"><%= ticket.ticket_to %></a>
+
+
+                                                    </div>
+                                                </td>
+                                                <% } %>
+                                                <td>
+                                                    <div class="hstack gap-3">
+                                                        <div>
+                                                            <a href="javascript:void(0);" class="d-block mb-1" style="font-weight: <% if (ticket.ticket_status === "Gözləmədə"){ %> bolder <% } else { %> lighter <% } %>"><%= ticket.ticket_subject %></a>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="fs-12 fw-medium mb-2">
+                                                        <%
+                                                            let percentage;
+                                                            let progressBarClass;
+
+                                                            switch(ticket.ticket_status) {
+                                                                case "Gözləmədə":
+                                                                    percentage = 33;
+                                                                    progressBarClass = "primary";
+                                                                    break;
+                                                                case "Görüldü":
+                                                                    percentage = 66;
+                                                                    progressBarClass = "warning";
+                                                                    break;
+                                                                case "Bağlandı":
+                                                                    percentage = 100;
+                                                                    progressBarClass = "success";
+                                                                    break;
+                                                                default:
+                                                                    percentage = 0;
+                                                                    progressBarClass = "secondary"; // varsayılan bir renk
+                                                                    break;
+                                                            }
+                                                        %>
+                                                        <span style="font-weight: bold"><%= percentage %>%</span> tamamlandı
+                                                    </div>
+                                                    <div class="progress ht-3">
+                                                        <div class="progress-bar bg-<%= progressBarClass %>" role="progressbar" aria-valuenow="<%= percentage %>" aria-valuemin="0" aria-valuemax="100" style="width: <%= percentage %>%"></div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <% if (ticket.ticket_status === "Gözləmədə"){ %> <span class="ms-2 badge bg-soft-primary text-primary">Gözləmədə</span> <% } else if (ticket.ticket_status === "Görüldü" ) { %> <span class="ms-2 badge bg-soft-warning text-warning">Görüldü</span> <% } else if( ticket.ticket_status === "Bağlandı") { %><span class="ms-2 badge bg-soft-success text-success"> Bağlandı </span><% } %>
+                                                </td>
+                                                <td>
+                                                    <i class="feather-clock fs-10" style="font-weight: <% if (ticket.ticket_status === "Gözləmədə"){ %> bolder <% } else { %> lighter <% } %>"></i>
+                                                    <span style="font-weight: <% if (ticket.ticket_status === "Gözləmədə"){ %> bolder <% } else { %> lighter <% } %>"><%= new Date(ticket.createdAt).toLocaleDateString('az-AZ', { day: '2-digit', month: 'long', year: 'numeric' }) %></span>
+                                                </td>
+                                                <td>
+                                                    <div class="hstack gap-2 justify-content-end">
+                                                        <a href="/received-tickets/read-ticket/<%= ticket._id %>" class="avatar-text avatar-md">
+                                                            <i class="feather-eye"></i>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        <% }) %>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <ul class="list-unstyled d-flex align-items-center gap-2 mb-0 pagination-common-style ">
+                                    <% if (currentPage > 1) { %>
+                                        <li>
+                                            <a href="?page=<%= currentPage - 1 %>"><i class="bi bi-arrow-left"></i></a>
+                                        </li>
+                                    <% } %>
+
+                                    <% for (let i = 1; i <= totalPages; i++) { %>
+                                        <li>
+                                            <a href="?page=<%= i %>" class="<%= currentPage === i ? 'active' : '' %>"><%= i %></a>
+                                        </li>
+                                    <% } %>
+
+                                    <% if (currentPage < totalPages) { %>
+                                        <li>
+                                            <a href="?page=<%= currentPage + 1 %>"><i class="bi bi-arrow-right"></i></a>
+                                        </li>
+                                    <% } %>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</main>
+
+
+<%- include('partials/systemparameters')%>
+<%- include('partials/footer')%>
+
+</body>
+
+</html>
